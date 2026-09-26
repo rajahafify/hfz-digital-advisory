@@ -944,26 +944,42 @@ registration price are highlighted in the table automatically.
 
 ## Deploy to GitHub Pages
 
+**Live at <https://rajahafify.github.io/hfz-digital-advisory/>** —
+repo <https://github.com/rajahafify/hfz-digital-advisory>.
+
 The workflow at `.github/workflows/deploy-pages.yml` builds and deploys on every
-push to `main`.
+push to `main`. Nothing to do by hand: commit and push.
 
-1. Create an empty public repo on GitHub.
-2. Push this workspace:
+### Why it is public
 
-   ```bash
-   git init
-   git add .
-   git commit -m "HFZ site"
-   git remote add origin https://github.com/<user>/<repo>.git
-   git push -u origin main
-   ```
+GitHub Pages on a free account only serves public repos. A private repo needs
+Pro. The site is a marketing site, so public is the intent, not a compromise.
 
-3. In the repo: **Settings → Pages → Source → GitHub Actions**.
-4. Wait for the workflow. The site lands at
-   `https://<user>.github.io/<repo>/`.
+### How it was set up
 
-The workflow sets `BASE_PATH=/<repo>/` so asset URLs resolve under the project
-path. If you rename the repo, the next push fixes it.
+```bash
+gh repo create hfz-digital-advisory --public --source=. --remote=origin
+git push -u origin main
+gh api -X POST repos/rajahafify/hfz-digital-advisory/pages -f build_type=workflow
+```
+
+That last call is the one people miss. The workflow uploads a Pages artifact,
+but the repo setting must already say **Source → GitHub Actions** or the deploy
+job 404s. `actions/configure-pages@v5` does not set it; only the API or the
+Settings UI does. Setting it up front avoids a failed first run.
+
+### Base path
+
+The workflow sets `BASE_PATH=/${{ github.event.repository.name }}/`, read from
+the event rather than hardcoded. Rename the repo and the next push fixes the
+asset URLs automatically.
+
+### Custom domain
+
+Add a `public/CNAME` file containing the domain, remove `BASE_PATH` from the
+workflow build step, and point the domain at GitHub Pages per GitHub's docs.
+Note the Pages site currently has `https_enforced: true` — a custom domain will
+need a valid cert before it serves.
 
 ### Custom domain
 
