@@ -1,0 +1,26 @@
+# build output, staged for publishing
+publish/
+
+# dependencies and local build
+site/node_modules/
+site/dist/
+site/.vite/
+
+# editor and OS noise
+.DS_Store
+Thumbs.db
+
+# ---------------------------------------------------------------------------
+# WorkBuddy tooling. The .genie file is a pointer to the desktop app's session,
+# and .workbuddy/ holds per-app config — neither is source.
+.wbapp_*.genie
+.workbuddy/
+
+# Screenshots taken while verifying layout. They are debug artifacts: 30MB of
+# them, and they go stale the moment the design moves. Regenerate with
+# .workbuddy-ai/shots/shot.sh when needed.
+.workbuddy-ai/shots/
+
+# .workbuddy-ai/memory/ is deliberately NOT ignored. It is the session log —
+# what changed, what broke, and why each decision was made. For a project that
+# has been iterated this heavily that is the most useful document in the repo.

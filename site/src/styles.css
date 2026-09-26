@@ -1,0 +1,2873 @@
+:root {
+  --ground: #0b0c0e;
+  --ground-2: #131519;
+  --paper: #f3f4f6;
+  --paper-warm: #f7f3ec;
+  --paper-ink: #0e1116;
+  --ink: #f2f3f5;
+  --ink-soft: rgba(242, 243, 245, 0.6);
+  --rule: rgba(242, 243, 245, 0.16);
+  --accent: #e9f94a;
+  --accent-ink: #0b0c0e;
+
+  /* =====================================================================
+     Category hues. The page carries four kinds of thing — infrastructure
+     (domain, hosting, email), product (packages, builds), care (maintenance,
+     bundles) and growth (add-ons, SEO) — and each gets a hue so the icons and
+     the data bars say which kind you are looking at before you read a word.
+
+     Every hue needs TWO values. A colour light enough to glow on #0b0c0e is
+     far too light to pass contrast on #f3f4f6, so the paper chapters switch
+     to the -ink value. Never use a bare hue on the paper ground.
+     ===================================================================== */
+  --hue-infra: #5ec8f0;
+  --hue-infra-ink: #0a5f85;
+  --hue-product: #b5a1ff;
+  --hue-product-ink: #4c34ad;
+  --hue-care: #4ee0a0;
+  --hue-care-ink: #076b45;
+  --hue-growth: #e9f94a;
+  --hue-growth-ink: #5a6400;
+  --font-display: "Inter", "SF Pro Display", system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+  --font-text: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+    Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --wrap: 1240px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.06;
+  margin: 0 0 16px;
+}
+
+p {
+  margin: 0 0 16px;
+}
+
+a {
+  color: var(--ink);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.narrow {
+  max-width: 780px;
+}
+
+/* =====================================================================
+   Icon system. One 24x24 grid, one stroke weight (1.5), one cap and join
+   style, outline only. Colour comes from currentColor so an icon always
+   matches the ink of whatever it sits in. The sprite lives at the top of
+   the body; nothing here draws an icon, it only sizes one.
+   ===================================================================== */
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.ico {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ico-sm {
+  width: 18px;
+  height: 18px;
+}
+
+/* A hue class sets --hue once, and everything inside reads it: the icon, and
+   the data bars behind the rows. One assignment per group rather than a rule
+   per element. */
+.hue-infra {
+  --hue: var(--hue-infra);
+}
+
+.hue-product {
+  --hue: var(--hue-product);
+}
+
+.hue-care {
+  --hue: var(--hue-care);
+}
+
+.hue-growth {
+  --hue: var(--hue-growth);
+}
+
+/* the light values fail contrast on paper, so switch to the dark ones */
+.chapter.paper .hue-infra {
+  --hue: var(--hue-infra-ink);
+}
+
+.chapter.paper .hue-product {
+  --hue: var(--hue-product-ink);
+}
+
+.chapter.paper .hue-care {
+  --hue: var(--hue-care-ink);
+}
+
+.chapter.paper .hue-growth {
+  --hue: var(--hue-growth-ink);
+}
+
+/* Carries the wording for screen readers and search while a glyph carries it
+   visually. Used by the package matrix. */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+
+/* folio */
+.folio {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  border-left: 1px solid var(--rule);
+  padding-left: 14px;
+}
+
+.folio ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.folio a {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  color: rgba(242, 243, 245, 0.42);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.folio i {
+  font-style: normal;
+  opacity: 0.65;
+}
+
+.folio a:hover {
+  color: var(--ink);
+}
+
+.folio a.is-active {
+  color: var(--accent);
+}
+
+.folio a.is-active i {
+  opacity: 1;
+}
+
+/* The folio is fixed, so it crosses both grounds. Default ink is light,
+   which disappears over the paper chapters, so it flips to dark ink there.
+   Same convention as the rest of the paper chapter: accent goes monochrome. */
+.folio.on-paper {
+  border-left-color: rgba(14, 17, 22, 0.16);
+}
+
+.folio.on-paper a {
+  color: rgba(14, 17, 22, 0.5);
+}
+
+.folio.on-paper a:hover {
+  color: var(--paper-ink);
+}
+
+.folio.on-paper a.is-active {
+  color: var(--paper-ink);
+}
+
+/* The folio hides below 1240. A full label runs to about x=191, and the
+   content column starts at (vw - 1240) / 2 + 32, so below roughly 1680 the
+   label runs into the column. Only the numbers show there. */
+@media (min-width: 1241px) and (max-width: 1679px) {
+  .folio-label {
+    display: none;
+  }
+}
+
+/* title page */
+.titlepage {
+  position: relative;
+  min-height: 74vh;
+  display: flex;
+  align-items: center;
+  padding: 64px 0 56px;
+  overflow: hidden;
+}
+
+.grid-field {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(242, 243, 245, 0.12) 1px,
+    transparent 0
+  );
+  background-size: 22px 22px;
+  mask-image: linear-gradient(to bottom right, #000 0%, transparent 68%);
+  -webkit-mask-image: linear-gradient(to bottom right, #000 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.titlepage .wrap {
+  position: relative;
+}
+
+.folio-stamp {
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+.titlepage h1 {
+  font-size: clamp(34px, 5.4vw, 68px);
+  max-width: 24ch;
+  margin-bottom: 24px;
+}
+
+.lead {
+  font-size: clamp(17px, 1.4vw, 19px);
+  max-width: 58ch;
+  color: var(--ink-soft);
+}
+
+.floor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 44px;
+  margin: 44px 0 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+}
+
+.floor dt {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.floor dd {
+  margin: 6px 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(24px, 3vw, 34px);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* chapters */
+.chapter {
+  padding: 88px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.chapter-no {
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.chapter h2 {
+  font-size: clamp(28px, 3.8vw, 46px);
+  max-width: 26ch;
+}
+
+.chapter-lead {
+  max-width: 60ch;
+  color: var(--ink-soft);
+  margin-bottom: 44px;
+}
+
+
+.fine {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-top: 14px;
+}
+
+/* A fine print that closes a whole section sits under a block, not under a
+   table, so it takes the section rhythm rather than the 14px caption default.
+   Without this, section 03's closing line sat 14px under the two-column block
+   while section 02's equivalent gets 52px from `.flaws`. */
+.wrap > .fine {
+  margin-top: 52px;
+}
+
+/* one chapter prints on paper: the light insert inside a dark document */
+.chapter.paper {
+  background: var(--paper);
+  color: var(--paper-ink);
+}
+
+/* =====================================================================
+   Ground tints. A hue on a 22px icon reads as detail; a hue on the whole
+   chapter reads as colour, which is what the page was missing. Each dark
+   chapter carries a barely-there wash of its category hue, and the two paper
+   chapters are distinguished as cool grey and warm cream.
+
+   Keep these within about 12 points of the base ground. Any further and the
+   hairlines and the ghost numerals start to sit on a colour rather than on a
+   ground, and the page stops reading as a printed document.
+   ===================================================================== */
+#ch-rate {
+  background: #091520; /* infrastructure: cool */
+}
+
+#ch-rest {
+  background: #091813; /* care: green */
+}
+
+#ch-questions {
+  background: #100c1c; /* violet */
+  /* The last chapter is now the end of the document, so it carries the closing
+     space the footer used to provide. Without it the page stops abruptly. */
+  padding-bottom: 132px;
+}
+
+#ch-runs {
+  background: var(--paper-warm);
+}
+
+.chapter.paper .chapter-lead,
+.chapter.paper .fine,
+.chapter.paper .row-price em {
+  color: #5a6472;
+}
+
+.chapter.paper .ledger-rows .row,
+.chapter.paper .ledger th,
+.chapter.paper .ledger td,
+.chapter.paper .ticks li,
+.chapter.paper .faq details {
+  border-color: #dde1e6;
+}
+
+.chapter.paper a {
+  color: var(--paper-ink);
+}
+
+.chapter.paper .ledger thead th {
+  border-bottom-color: var(--paper-ink);
+}
+
+.chapter.paper .ledger-rows .row-price,
+.chapter.paper .tier .price,
+.chapter.paper .ledger td:not(:first-child) {
+  color: var(--paper-ink);
+}
+
+.chapter.paper .ledger-rows .dots {
+  border-bottom-color: #c9cfd6;
+}
+
+.chapter.paper .ledger .ext .dots {
+  border-bottom-color: #c9cfd6;
+}
+
+.chapter.paper .group-meta b {
+  color: var(--paper-ink);
+}
+
+.chapter.paper .group-mark {
+  border-color: #d5dae0;
+}
+
+.chapter.paper .group-head:hover .group-mark,
+.chapter.paper .fold-head:hover .group-mark,
+.chapter.paper .group[open] > .group-head .group-mark {
+  color: var(--paper-ink);
+  border-color: var(--paper-ink);
+}
+
+.chapter.paper .ledger td.warn {
+  color: #b4401b;
+}
+
+.chapter.paper .ticks li::before {
+  color: var(--paper-ink);
+}
+
+.chapter.paper .tier {
+  border-top-color: #d5dae0;
+}
+
+.chapter.paper .tier ul {
+  color: #5a6472;
+}
+
+.chapter.paper .tier .badge {
+  color: var(--hue, var(--paper-ink));
+}
+
+/* spread */
+
+
+/* ledger */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.ledger {
+  width: 100%;
+  border-collapse: collapse;
+  /* fixed layout, so the price columns keep the widths they are given instead
+     of being starved by the flexible extension column */
+  table-layout: fixed;
+}
+
+.ledger th,
+.ledger td {
+  text-align: left;
+  padding: 10px 14px 10px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 15px;
+}
+
+.ledger thead th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--ink);
+  white-space: nowrap;
+}
+
+.ledger td:not(:first-child),
+.ledger th:not(:first-child) {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.ledger td.warn {
+  color: #b4401b;
+}
+
+/* The extension column takes the slack, so a dotted leader connects the name to
+   its price instead of leaving a dead gap across the middle of the table. Same
+   print idiom the .ledger-rows use. Both price columns are fixed so the two
+   prices read as a pair, and so the continuation table under the "other six
+   extensions" fold lines up with this one. */
+.ledger thead th:nth-child(2),
+.ledger tbody td:nth-child(2) {
+  width: 150px;
+}
+
+.ledger thead th:nth-child(3),
+.ledger tbody td:nth-child(3) {
+  width: 150px;
+}
+
+/* the rightmost figure sits flush with the container edge, which is the
+   convention for a printed ledger and opens the gap between the two headers */
+.ledger thead th:last-child,
+.ledger tbody td:last-child {
+  padding-right: 0;
+}
+
+/* On a phone the two fixed price columns would starve the extension column,
+   so they shrink, the headers are allowed to wrap again, and the leader goes. */
+@media (max-width: 700px) {
+  .ledger thead th {
+    white-space: normal;
+  }
+
+  .ledger thead th:nth-child(2),
+  .ledger tbody td:nth-child(2),
+  .ledger thead th:nth-child(3),
+  .ledger tbody td:nth-child(3) {
+    width: 78px;
+  }
+
+  .ledger th,
+  .ledger td {
+    padding-right: 8px;
+  }
+
+  .ledger .ext .dots {
+    display: none;
+  }
+}
+
+.ledger .ext {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.ledger .ext .dots {
+  flex: 1 1 auto;
+  min-width: 20px;
+  border-bottom: 1px dotted var(--rule);
+  transform: translateY(-4px);
+}
+
+.ledger-rows .row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.ledger-rows .row-name {
+  flex: 0 1 auto;
+}
+
+.ledger-rows .dots {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted var(--rule);
+  transform: translateY(-4px);
+  min-width: 24px;
+}
+
+.ledger-rows .row-price {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ledger-rows .row-price em {
+  font-style: normal;
+  color: var(--ink-soft);
+  font-size: 11px;
+  margin-left: 8px;
+}
+
+/* Data bars for lists that are comparable tiers. The fill is the same number
+   the row already states, drawn to scale against the most expensive tier, so
+   the step between the three is visible without reading three figures. Kept
+   faint on purpose: it is a backdrop for the number, not a second number. */
+.ledger-rows .row-bar {
+  position: relative;
+}
+
+.ledger-rows .row-bar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: var(--v);
+  background: var(--hue, var(--accent));
+  opacity: 0.1;
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.ledger-rows .row-bar .row-name,
+.ledger-rows .row-bar .row-price,
+.ledger-rows .row-bar .dots {
+  position: relative;
+}
+
+.ticks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 26px;
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.ticks li::before {
+  content: "· ";
+  color: var(--accent);
+}
+
+/* tiers */
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+  gap: 28px;
+}
+
+.tier {
+  border-top: 2px solid var(--rule);
+  padding-top: 18px;
+}
+
+.tier.featured {
+  border-top-color: var(--hue, var(--accent));
+}
+
+.tier .badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hue, var(--accent));
+  margin: 0 0 6px;
+  min-height: 16px;
+}
+
+/* Only the featured tier has a badge, but every tier reserves the line, so the
+   three prices sit on one baseline instead of the featured column dropping. */
+.tier .badge:empty {
+  visibility: hidden;
+}
+
+.tier h3 {
+  font-size: 21px;
+  margin: 0 0 8px;
+}
+
+.tier .price {
+  font-family: var(--font-mono);
+  font-size: 34px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 20px;
+}
+
+.tier ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+.tier li {
+  padding: 4px 0;
+}
+
+/* wizard */
+.wizard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+  gap: 52px;
+  align-items: start;
+}
+
+.step {
+  border: 0;
+  padding: 0;
+  margin: 0 0 32px;
+}
+
+.step legend {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  padding: 0;
+  margin-bottom: 14px;
+}
+
+.step legend .mono {
+  color: var(--accent);
+  margin-right: 10px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  font: inherit;
+  font-size: 15px;
+  padding: 8px 14px;
+  border-radius: 3px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+
+.chip:hover {
+  background: var(--ground-2);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.chip small {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+  margin-left: 8px;
+}
+
+.wizard-skip {
+  margin: 0;
+}
+
+.linkish {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.linkish:hover {
+  color: var(--accent);
+}
+
+/* quote panel */
+.receipt {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 22px 22px 20px;
+  box-shadow: 0 1px 0 rgba(14, 19, 26, 0.06),
+    0 18px 40px -30px rgba(14, 19, 26, 0.5);
+  position: sticky;
+  top: 36px;
+}
+
+.receipt-head {
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+
+.receipt-perf {
+  height: 1px;
+  background: var(--rule);
+  margin: 0 0 16px;
+}
+
+#receipt-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#receipt-items li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--rule);
+}
+
+#receipt-items li:last-child {
+  border-bottom: 0;
+}
+
+.receipt-empty {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.receipt-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 2px solid var(--ink);
+}
+
+.receipt-total span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.receipt-total strong {
+  font-family: var(--font-mono);
+  font-size: 29px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.receipt-total strong.bump {
+  animation: bump 0.38s ease;
+}
+
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.07);
+    color: var(--accent);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.receipt-fine {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 10px 0 16px;
+}
+
+/* Shown only while the figure is still the suggested one. It reads as a note
+   rather than a warning: a pre-filled number is an offer, not a problem. */
+.receipt-hint {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin: 0 0 18px;
+  padding-left: 12px;
+  border-left: 2px solid #c9cfd6;
+}
+
+/* =====================================================================
+   The receipt's one conversion action. It was an underlined text link, which
+   is the weakest possible affordance for the click that matters most.
+   It is the only place on the page that uses a colour outside the palette:
+   WhatsApp green, because the glyph plus the colour is what makes the channel
+   obvious at a glance. Text is dark, not white — white on #25d366 measures
+   1.99:1 and fails AA. Dark green measures 7.74:1.
+   ===================================================================== */
+.sendline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 15px 22px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #062b16;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+.sendline .ico {
+  width: 20px;
+  height: 20px;
+}
+
+.sendline:hover {
+  background: #1fc65e;
+}
+
+.sendline:active {
+  transform: translateY(1px);
+}
+
+/* the one filled icon in the set; see the sprite comment */
+.ico-brand {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* runs */
+.runs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+  gap: 32px;
+}
+
+.runs h3 {
+  font-size: 20px;
+  margin: 8px 0 8px;
+}
+
+/* The step body. This selector used to be `.runs p:last-child`, which stopped
+   matching the body and started matching `.runs-meta` the moment the meta line
+   was appended to each step. The effect: the meta inherited the body's 15px and
+   lost its own 16px top margin (so its hairline sat tight against the paragraph
+   above it), while the body fell back to the default 17px. Target the body
+   directly instead of by position.
+   `.runs` only ever renders on the paper chapter, so the grey is the readable
+   one for light ground, not #98a2b3 (which measures 2.34:1 there). */
+.runs li > p:not(.mono):not(.runs-meta) {
+  color: #5a6472;
+  font-size: 15px;
+  margin: 0 0 16px;
+}
+
+.runs .mono {
+  color: var(--accent);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* The process reads as a rail: one line threaded through the four steps, with
+   the step icon sitting on it as the node. Section 06 prints light, so the
+   rail is a paper hairline and the icon is dark ink on a paper disc that
+   masks the line behind it.
+   Each step is a column so its meta line can be pushed to the bottom of the
+   row: the four bodies run to different line counts, and without this the
+   four hairlines land at four different heights. */
+.runs li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.runs .mono .ico {
+  width: 20px;
+  height: 20px;
+  background: var(--paper);
+  border-radius: 999px;
+  position: relative;
+  z-index: 1;
+}
+
+.runs li::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 24px;
+  right: -32px; /* bridge the grid gap so the line is continuous */
+  height: 1px;
+  background: #c9cfd6;
+}
+
+.runs li:last-child::after {
+  display: none;
+}
+
+/* below this the four steps wrap onto more than one row, and a rail that
+   bridges a gap that is now a line break reads as a mistake */
+@media (max-width: 1040px) {
+  .runs li::after {
+    display: none;
+  }
+}
+
+/* faq */
+.faq details {
+  border-bottom: 1px solid var(--rule);
+  padding: 16px 0;
+}
+
+.faq summary {
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.faq details p {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+
+/* reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .receipt-total strong.bump {
+    animation: none;
+  }
+}
+
+@media (max-width: 1240px) {
+  .folio {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .wrap {
+    padding: 0 22px;
+  }
+  .wizard {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .receipt {
+    position: static;
+  }
+  .chapter {
+    padding: 64px 0;
+  }
+  .titlepage {
+    min-height: auto;
+    padding: 56px 0 48px;
+  }
+  .floor {
+    gap: 26px;
+  }
+  .split2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.split2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+/* the hero is the scene. Copy sits on the top layer, the sites run behind it. */
+.titlepage {
+  min-height: 94vh;
+  align-items: stretch;
+  padding: 0;
+}
+
+.titlepage-copy {
+  max-width: 620px;
+}
+
+.grid-field {
+  z-index: 0;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.hero-layer {
+  position: relative;
+  z-index: 3;
+}
+
+/* scrim only where the words are, so the sites stay visible on the right */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+      100deg,
+      var(--ground) 0%,
+      rgba(11, 12, 14, 0.94) 24%,
+      rgba(11, 12, 14, 0.55) 44%,
+      rgba(11, 12, 14, 0) 74%
+    ),
+    linear-gradient(to top, var(--ground) 2%, rgba(11, 12, 14, 0) 46%);
+}
+
+.scene.ready {
+  opacity: 1;
+}
+
+.scene-source {
+  display: none;
+}
+
+/* Portrait, 9:16. The framed page is rendered at a PORTRAIT viewport (900x1600)
+   rather than the 1440x900 desktop one, so the sample sites lay out for a tall
+   screen instead of being cropped to a slot. The samples use max-width
+   containers, so they reflow at 900 — a handful of fixed-width elements inside
+   them overflow and are clipped, which reads as a page wider than its window. */
+.panel {
+  width: 300px;
+  height: 533px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  box-shadow: 0 40px 80px -40px rgba(14, 19, 26, 0.7);
+}
+
+/* the panel frames a real page, scaled down. not a drawing of one. */
+.frame {
+  position: relative;
+  width: 900px;
+  height: 1600px;
+  transform: scale(0.3333);
+  transform-origin: 0 0;
+}
+
+.panel iframe {
+  position: absolute;
+  inset: 0;
+  width: 900px;
+  height: 1600px;
+  border: 0;
+  display: block;
+  background: #0d1218;
+}
+
+.poster {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 28px;
+  background: #0d1218;
+  transition: opacity 0.5s ease;
+}
+
+.panel.ready .poster {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.poster-no {
+  color: var(--accent);
+  margin: 0;
+}
+
+.poster b {
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1;
+}
+
+.poster i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(242, 243, 245, 0.55);
+}
+
+@media (max-width: 900px) {
+  .titlepage-grid {
+    grid-template-columns: 1fr;
+  }
+  .scene {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   HERO, rebuilt to the reference language:
+   corner label rails, hairline rules, mixed grotesque + italic serif,
+   one accent, one marker dot.
+   ===================================================================== */
+.hero-layer {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 94vh;
+  padding: 0 32px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  line-height: 1.1;
+}
+
+.brand span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.topnav {
+  display: flex;
+  gap: 30px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.topnav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.topnav a:hover {
+  color: var(--ink);
+}
+
+.pill {
+  display: inline-block;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+}
+
+.pill:hover {
+  background: rgba(242, 243, 245, 0.08);
+}
+
+.pill-solid {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.pill-solid:hover {
+  background: #f2ff6b;
+}
+
+.titlepage-copy {
+  align-self: center;
+  max-width: 900px;
+  padding: 48px 0 24px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 26px;
+}
+
+.titlepage h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(42px, 6.6vw, 104px);
+  line-height: 0.96;
+  letter-spacing: -0.042em;
+  margin: 0 0 30px;
+  max-width: 20ch;
+}
+
+.titlepage h1 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+/* The h1 carries a <br> so "If you can imagine it," and "we can build it." stay
+   on their own lines, which also keeps the headline clear of the 3D panel.
+   Below this width the first half no longer fits on one line anyway, and the
+   forced break leaves "it," stranded on a line of its own. Let it flow. */
+@media (max-width: 600px) {
+  .titlepage h1 br {
+    display: none;
+  }
+}
+
+.titlepage .lead {
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 52ch;
+  margin: 0;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-top: 38px;
+  flex-wrap: wrap;
+}
+
+.underlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 4px;
+}
+
+.underlink:hover {
+  border-bottom-color: var(--accent);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+}
+
+.hero-rail {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 20px 0 26px;
+  border-top: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+
+.rail-item {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.rail-item b {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.rail-fill {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 900px) {
+  .topnav {
+    display: none;
+  }
+  .hero-layer {
+    min-height: auto;
+    padding: 0 22px;
+  }
+  .titlepage-copy {
+    padding: 40px 0 16px;
+  }
+  .hero-rail {
+    gap: 18px;
+  }
+}
+
+/* the receipt is a paper insert inside the dark document: it needs its own ink */
+.receipt {
+  color: var(--paper-ink);
+}
+
+.receipt-head,
+.receipt-empty,
+.receipt-fine,
+.receipt-hint,
+.receipt-total span {
+  color: #5a6472;
+}
+
+#receipt-items li {
+  color: var(--paper-ink);
+  border-bottom-color: #dde1e6;
+}
+
+.receipt-perf {
+  background: #dde1e6;
+}
+
+.receipt-total {
+  border-top-color: var(--paper-ink);
+}
+
+.receipt-total strong {
+  color: var(--paper-ink);
+}
+
+/* controls on the dark ground */
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.ledger td.warn {
+  color: #ff9b6b;
+}
+
+/* accent is invisible on the paper chapter, so it goes monochrome there */
+.chapter.paper .runs .mono,
+.chapter.paper .chapter-no {
+  color: var(--paper-ink);
+}
+
+/* italic serif accent inside the sample sites, same device as the hero */
+.ms h4 em,
+.ms .h-crop em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+
+/* the rail links to the real page of whichever site is on stage */
+.nowshowing a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 2px;
+}
+
+.nowshowing a:hover {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
+
+/* =====================================================================
+   Progressive disclosure.
+   One component for every list on the page: the head is the summary, the
+   body is the detail. Open groups read as content, closed groups read as a
+   single line. That is what stops a sixty-line price list reading as a wall.
+   ===================================================================== */
+.group,
+.fold {
+  border-top: 1px solid var(--rule);
+}
+
+.group-head,
+.fold-head {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 26px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.group-head::-webkit-details-marker,
+.fold-head::-webkit-details-marker {
+  display: none;
+}
+
+.group-name {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0;
+  transition: opacity 0.18s ease;
+}
+
+.fold-name {
+  font-size: 16px;
+  font-weight: 500;
+  transition: opacity 0.18s ease;
+}
+
+.group-head:hover .group-name,
+.fold-head:hover .fold-name {
+  opacity: 1;
+}
+
+/* The icon leads the row, so a stack of closed groups reads as a set of
+   labelled sections rather than a list of headings. */
+.group-head .ico,
+.fold-head .ico {
+  align-self: center;
+  color: var(--hue, var(--ink-soft));
+  opacity: 0.88;
+  transition: opacity 0.18s ease;
+}
+
+.group-head:hover .ico,
+.group[open] > .group-head .ico {
+  opacity: 1;
+}
+
+.group-meta {
+  margin-left: auto;
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+/* the price inside the meta line is the most useful thing in a collapsed row,
+   so it carries the ink while the count around it stays quiet */
+.group-meta b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* A 12px cross was too quiet an affordance for the main control on the page.
+   It is now a ringed target that fills on hover, so a stack of closed groups
+   reads as something you can open. */
+.group-mark {
+  position: relative;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  align-self: center;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.group-mark::before,
+.group-mark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 11px;
+  height: 1px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.group-mark::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  transition: transform 0.22s ease;
+}
+
+.group[open] > .group-head .group-mark::after,
+.fold[open] > .fold-head .group-mark::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.group-head:hover .group-mark,
+.fold-head:hover .group-mark {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.group[open] > .group-head .group-mark {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.group-body {
+  padding-bottom: 40px;
+}
+
+/* Native <details> snaps open, which reads as a jump. A short fade on the
+   panel makes the change look intentional.
+   Deliberately NOT animating block-size via ::details-content: measured with
+   the feature supported, the panel sized itself to 172px against 191px of
+   content and clipped the last row. An accordion that eats a row of prices is
+   worse than one that snaps.
+   The fade starts at 0.6 rather than 0, so even a frame caught mid-animation
+   is still legible. */
+@keyframes groupIn {
+  from {
+    opacity: 0.6;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.group[open] > .group-body,
+.fold[open] > .fold-body {
+  animation: groupIn 0.3s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group[open] > .group-body,
+  .fold[open] > .fold-body {
+    animation: none;
+  }
+}
+
+.fold-body {
+  padding-bottom: 22px;
+}
+
+.fold {
+  border-top-color: var(--rule);
+  margin-top: 4px;
+}
+
+.fold-head {
+  padding: 18px 0;
+}
+
+/* the paper chapter carries the same component in light ink */
+.chapter.paper .group,
+.chapter.paper .fold {
+  border-top-color: #dde1e6;
+}
+
+.chapter.paper .group-meta,
+.chapter.paper .group-mark {
+  color: #5a6472;
+}
+
+/* the FAQ uses the same rhythm as the price groups */
+.faq details {
+  border-top: 1px solid var(--rule);
+  border-bottom: 0;
+  padding: 0;
+}
+
+.faq summary {
+  padding: 22px 0;
+  font-size: 19px;
+}
+
+.faq details p {
+  padding-bottom: 22px;
+  margin: 0;
+}
+
+/* =====================================================================
+   Section 07. The FAQ used to sit in a 780px column with a quarter of the
+   viewport dead to its right. It is now two columns: the questions, and a
+   contact block that answers the question nobody types.
+   ===================================================================== */
+.faq-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 80px;
+  align-items: start;
+  margin-top: 36px;
+}
+
+.faq summary {
+  display: flex;
+  gap: 18px;
+  align-items: baseline;
+}
+
+/* display:flex drops the native marker, so the chevron is drawn here and
+   flips on open. The number goes accent while the answer is showing. */
+.faq summary::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  align-self: center;
+  border-right: 1px solid var(--ink-soft);
+  border-bottom: 1px solid var(--ink-soft);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.22s ease;
+}
+
+.faq details[open] > summary::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.faq-no {
+  flex: 0 0 auto;
+  color: var(--ink-soft);
+  padding-top: 4px;
+  transition: color 0.18s ease;
+}
+
+.faq details[open] .faq-no {
+  color: var(--accent);
+}
+
+.faq details p {
+  padding-left: 35px;
+}
+
+.faq-aside {
+  border-top: 1px solid var(--rule);
+  padding-top: 22px;
+}
+
+.contact-list {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+}
+
+.contact-list li {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 15px;
+}
+
+.contact-list li > .mono {
+  color: var(--ink-soft);
+  padding-top: 4px;
+}
+
+.contact-list a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  justify-self: start;
+}
+
+.contact-list a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.aside-wa {
+  display: inline-block;
+}
+
+/* Both lines were relocated here when the footer was removed. This chapter's
+   contact block is now the only place these details appear. */
+.aside-note {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #5a6472;
+  margin: 16px 0 0;
+}
+
+.aside-note + .aside-note {
+  margin-top: 4px;
+}
+
+@media (max-width: 1000px) {
+  .faq-layout {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+}
+
+/* =====================================================================
+   Chapter furniture.
+   The page was carrying its argument in prose and its numbers in three
+   collapsible lists, which left it feeling empty. These are the blocks a
+   page in this category is actually built from: an honest count band, a
+   package matrix, an included/excluded pair, and a payment band.
+   ===================================================================== */
+
+/* count band: real numbers, counted off the price list itself */
+.counts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 30px;
+  list-style: none;
+  margin: 0 0 48px;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.counts li {
+  position: relative;
+  padding: 28px 0 30px;
+}
+
+/* The divider is drawn in the gap between cells, so it gets equal room on
+   both sides. A border on the cell itself cannot do that: border-right lands
+   flush against the next cell's text, and border-left flush against the
+   previous cell's. That is what made every label butt against its line. */
+.counts li + li::before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+}
+
+.counts li .ico {
+  display: block;
+  color: var(--hue, var(--ink-soft));
+  margin-bottom: 18px;
+}
+
+.counts b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.counts span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* four columns is too tight on a phone: the labels wrap to three ragged
+   lines. Two by two keeps the band reading as a block. */
+@media (max-width: 700px) {
+  .counts {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+  }
+
+  .counts li {
+    padding: 20px 0 22px;
+  }
+
+  /* in a 2x2 the divider belongs only before column two of each row */
+  .counts li + li::before {
+    display: none;
+  }
+
+  .counts li:nth-child(even)::before {
+    display: block;
+    left: -10px;
+  }
+
+  .counts li:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+/* the package matrix: rows are features, columns are tiers */
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.matrix th,
+.matrix td {
+  padding: 14px 18px 14px 0;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: baseline;
+}
+
+.matrix thead th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--ink);
+  white-space: nowrap;
+}
+
+.matrix thead th span {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: var(--ink);
+  margin-top: 8px;
+}
+
+.matrix tbody th {
+  font-weight: 400;
+}
+
+.matrix td {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Yes and No read as glyphs now. The wording stays in the DOM behind .vh, so
+   the table still says what it means to a screen reader and to search. */
+.matrix td.yes,
+.matrix td.no {
+  line-height: 1;
+}
+
+.matrix td.yes {
+  color: var(--ink);
+}
+
+.matrix td.no {
+  color: var(--ink-soft);
+}
+
+.matrix td .ico {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.matrix tbody tr:hover {
+  background: rgba(242, 243, 245, 0.03);
+}
+
+/* Quantity dots: the step between 5, 10 and 15 pages, countable at a glance.
+   Built by script from data-qty; the wording is already in the cell. */
+.dots {
+  display: inline-flex;
+  gap: 3px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.22;
+}
+
+.dots i.on {
+  opacity: 1;
+}
+
+.matrix td.qty b {
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+/* A three-step meter for the SEO row, which is a level rather than a yes. */
+.lvl-meter {
+  display: inline-flex;
+  gap: 2px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.lvl-meter i {
+  width: 12px;
+  height: 4px;
+  border-radius: 1px;
+  background: currentColor;
+  opacity: 0.2;
+}
+
+.lvl-meter i.on {
+  opacity: 1;
+}
+
+/* included / excluded pair */
+.inout {
+  margin-top: 60px;
+}
+
+.block-label {
+  color: var(--ink-soft);
+  margin: 0 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.ticks.stack {
+  display: block;
+  margin: 0;
+}
+
+.ticks.stack li {
+  padding: 8px 0;
+}
+
+.ticks.stack.muted li {
+  color: var(--ink-soft);
+}
+
+.ticks.stack b {
+  font-weight: 500;
+}
+
+/* the payment band */
+.band {
+  margin-top: 60px;
+  border-top: 1px solid var(--rule);
+  padding-top: 28px;
+}
+
+/* The payment schedule as one proportional bar. Three numbers in a row state
+   the split; a bar shows it, and the 10% looks as small as it actually is.
+   Section 04 prints light, so every segment here is dark on paper. */
+.split-bar {
+  display: flex;
+  gap: 3px;
+  height: 62px;
+  margin: 22px 0 24px;
+}
+
+.split-bar .seg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  padding: 0 14px;
+  border-radius: 1px;
+}
+
+.split-bar .seg b {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.split-bar .seg span {
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.seg-1 {
+  background: var(--paper-ink);
+  color: var(--paper);
+}
+
+/* 0.52 alpha measured 3.69:1 against the light ink, which fails AA for text
+   this size. 0.72 gives 7.3:1 and still reads as a step down from segment 1. */
+.seg-2 {
+  background: rgba(14, 17, 22, 0.72);
+  color: var(--paper);
+}
+
+.seg-3 {
+  background: rgba(14, 17, 22, 0.12);
+  color: var(--paper-ink);
+}
+
+@media (max-width: 700px) {
+  .split-bar {
+    height: 40px;
+  }
+
+  .split-bar .seg {
+    padding: 0 7px;
+  }
+
+  .split-bar .seg b {
+    font-size: 13px;
+  }
+
+  .split-bar .seg span {
+    display: none;
+  }
+}
+
+/* the "fix" line under each pain */
+
+
+/* the meta line closing each process step */
+.runs-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: auto 0 0; /* pushes the rule to the foot of the row */
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+/* =====================================================================
+   The scope sheet in section 06. The four steps above describe a fixed
+   quote; this is what one actually looks like. Showing the document does
+   the work three sentences were doing badly. Paper ground, so all ink
+   here is dark: never use --ink or --ink-soft inside this block.
+   ===================================================================== */
+.scope-sheet {
+  margin: 52px 0 0;
+  padding: 24px 28px 20px;
+  background: #fff;
+  border: 1px solid #dde1e6;
+}
+
+.scope-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--paper-ink);
+  color: #5a6472;
+}
+
+.scope-rows {
+  padding-top: 6px;
+}
+
+.scope-row {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 16px;
+  margin: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid #eceef1;
+}
+
+.scope-row:last-child {
+  border-bottom: 0;
+}
+
+.scope-k {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #5a6472;
+  padding-top: 3px;
+}
+
+.scope-v {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--paper-ink);
+  font-size: 15px;
+}
+
+.scope-v b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.scope-foot {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--paper-ink);
+  color: var(--paper-ink);
+}
+
+@media (max-width: 720px) {
+  .scope-sheet {
+    padding: 20px 18px 16px;
+  }
+
+  .scope-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .scope-k {
+    padding-top: 0;
+  }
+}
+
+.fine.wide {
+  max-width: 80ch;
+}
+
+/* the paper chapter carries all of it in light ink */
+.chapter.paper .counts,
+.chapter.paper .counts li,
+.chapter.paper .matrix th,
+.chapter.paper .matrix td,
+.chapter.paper .block-label,
+.chapter.paper .band,
+.chapter.paper .runs-meta {
+  border-color: #dde1e6;
+}
+
+.chapter.paper .counts span,
+.chapter.paper .matrix thead th,
+.chapter.paper .block-label,
+.chapter.paper .runs-meta,
+.chapter.paper .ticks.stack.muted li {
+  color: #5a6472;
+}
+
+.chapter.paper .matrix thead th span,
+.chapter.paper .counts b {
+  color: var(--paper-ink);
+}
+
+.chapter.paper .matrix thead th {
+  border-bottom-color: var(--paper-ink);
+}
+
+.chapter.paper .matrix td.yes {
+  color: var(--paper-ink);
+}
+
+.chapter.paper .matrix td.no {
+  color: #6b7480;
+}
+
+.chapter.paper .matrix td {
+  color: var(--paper-ink);
+}
+
+/* The featured column is tinted so it reads as a column rather than just a
+   bolder heading. Column 3 is Business; column 1 is the row header.
+   The column rule outranks the row-hover rule on purpose, so the featured
+   column stays lit while you scan a row. */
+.chapter.paper .matrix thead th:nth-child(3),
+.chapter.paper .matrix tbody td:nth-child(3) {
+  background: rgba(14, 17, 22, 0.05);
+}
+
+.chapter.paper .matrix tbody tr:hover {
+  background: rgba(14, 17, 22, 0.025);
+}
+
+/* =====================================================================
+   Section 02 shows the four failures instead of describing them: each card
+   is a before/after pair of miniature pages. Words were doing work here that
+   a side-by-side comparison does better and in a tenth of the space.
+   ===================================================================== */
+.flaws {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 46px 56px;
+  margin-bottom: 52px;
+}
+
+.flaw-tag {
+  color: var(--hue, var(--ink-soft));
+  margin: 0 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--hue, var(--rule));
+}
+
+/* Section 02's four cards are not categories, but giving each its own hue
+   separates them at a glance and puts colour into the one long chapter that
+   was still pure monochrome. Assigned by position: the markup carries no
+   meaning for this, so keep the order if you reorder the cards. */
+.flaws > .flaw:nth-child(1) {
+  --hue: var(--hue-growth);
+}
+
+.flaws > .flaw:nth-child(2) {
+  --hue: var(--hue-infra);
+}
+
+.flaws > .flaw:nth-child(3) {
+  --hue: var(--hue-product);
+}
+
+.flaws > .flaw:nth-child(4) {
+  --hue: var(--hue-care);
+}
+
+/* Section 02 used to be four unlabelled before/after pairs under abstract
+   headings ("The offer", "The phone"). The idea was there but nothing said
+   what was wrong, which is what made the messaging read as confused. Each card
+   now states the failure, says what it costs, labels the two miniatures, and
+   carries the source for the claim. */
+.flaw-title {
+  font-size: 21px;
+  margin: 0 0 10px;
+}
+
+.flaw-body {
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin: 0 0 22px;
+  max-width: 46ch;
+}
+
+.flaw-when {
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+
+/* the source line is a footnote to the card, not part of its argument */
+.flaw-src {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin: 20px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  max-width: 48ch;
+}
+
+.flaw-col {
+  display: grid;
+  align-content: start;
+}
+
+/* The phone miniatures are 88px wide in a column three times that, so without
+   this they sit marooned against the left edge. */
+.flaw-col .phone {
+  margin-inline: auto;
+}
+
+/* Only the source name is the link, not the finding. Underlining the whole
+   sentence made it unclear what was clickable. */
+.flaw-src a {
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  transition: border-color 0.16s ease;
+}
+
+.flaw-src a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.flaw-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.win {
+  /* the marker dot and the spark burst are both absolutely positioned inside
+     this box, so it has to be their containing block */
+  position: relative;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 16px;
+  min-height: 132px;
+  background: rgba(242, 243, 245, 0.03);
+}
+
+.win.bad {
+  opacity: 0.46;
+}
+
+.win.good {
+  border-color: rgba(233, 249, 74, 0.4);
+}
+
+.win-h {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.32;
+  margin: 0 0 12px;
+  /* the marker dot sits at the top right; without this the headline runs
+     under it on narrow cards */
+  padding-right: 26px;
+}
+
+.win.bad .win-h {
+  color: var(--ink-soft);
+}
+
+.win-nav {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.win-btn {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  /* transparent, not absent, so the pending state can put a border on it
+     without shifting the layout when it resolves */
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* =====================================================================
+   Section 02: the "after" miniature starts out looking like the "before",
+   then resolves when the card is scrolled to.
+
+   `.pending` is added from JS, never written into the markup, so a failed
+   script leaves every card in its finished state rather than permanently
+   dimmed. Same rule as .reveal.
+
+   Everything that changes is transitioned, so the resolve is one gesture:
+   dim lifts, rule goes accent, content sharpens, the dead button comes alive.
+   ===================================================================== */
+.win.good,
+.win.good::before,
+.win.good .win-btn,
+.phone.good,
+.phone.good::before {
+  transition: opacity 0.55s ease, border-color 0.55s ease, filter 0.55s ease,
+    transform 0.55s ease, background 0.55s ease, color 0.55s ease;
+}
+
+.flaw.pending .win.good,
+.flaw.pending .phone.good {
+  opacity: 0.46;
+  border-color: rgba(255, 138, 107, 0.26);
+  /* blurred, so it reads as unresolved rather than merely pale — and it echoes
+     the hero, where the framed sites are blurred for the same reason */
+  filter: blur(2.5px) saturate(0.35);
+  transform: scale(0.985);
+}
+
+.flaw.pending .win.good::before,
+.flaw.pending .phone.good::before {
+  background: transparent;
+  border-color: rgba(255, 138, 107, 0.55);
+}
+
+.flaw.pending .win.good .win-btn {
+  background: transparent;
+  border-color: var(--rule);
+  color: var(--ink-soft);
+}
+
+/* the burst. Short, small, in the card's own hue rather than a single accent,
+   so the four cards read as four separate things resolving. */
+.spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: var(--hue, var(--accent));
+  pointer-events: none;
+  animation: spark-out 0.7s ease-out forwards;
+}
+
+@keyframes spark-out {
+  from {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .win.good,
+  .win.good::before,
+  .win.good .win-btn,
+  .phone.good,
+  .phone.good::before {
+    transition: none;
+  }
+
+  .spark {
+    display: none;
+  }
+}
+
+.win-btn.dead {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+/* the phone pair: one frame whose content is wider than it is */
+.phone {
+  width: 88px;
+  height: 132px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 9px;
+  overflow: hidden;
+}
+
+.phone.bad {
+  opacity: 0.46;
+}
+
+.phone.good {
+  border-color: rgba(233, 249, 74, 0.4);
+}
+
+.phone-wide {
+  width: 190px;
+  height: 96px;
+  border-radius: 6px;
+  background: repeating-linear-gradient(
+      to right,
+      rgba(242, 243, 245, 0.18) 0 1px,
+      transparent 1px 26px
+    ),
+    rgba(242, 243, 245, 0.07);
+}
+
+.phone.good i {
+  display: block;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(242, 243, 245, 0.11);
+  margin-bottom: 9px;
+}
+
+/* the search result pair */
+.serp {
+  min-height: 132px;
+}
+
+.serp-url {
+  color: var(--ink-soft);
+  margin: 0 0 8px;
+}
+
+.serp-t {
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 0 0 8px;
+}
+
+.win.bad .serp-t {
+  color: var(--ink-soft);
+}
+
+.win.good .serp-t {
+  color: #9dc0ff;
+}
+
+.serp-d {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .flaws {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =====================================================================
+   The claims band. Sits directly under the hero so the argument is stated
+   before the evidence, with each claim carrying its own proof underneath.
+   A claim without its number next to it is just an assertion.
+   ===================================================================== */
+.claims {
+  padding: 0 0 84px;
+}
+
+.claims-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.claims-row li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0 6px;
+}
+
+/* Same divider rule as .counts: drawn in the gap between cells so it gets
+   equal room on both sides. A border on the cell itself lands flush against
+   a neighbour's text on one side or the other. */
+.claims-row li + li::before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+}
+
+.claims-row b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.claims-row span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  /* sits at the foot of the cell, so all four proof lines align even when a
+     claim title wraps to two lines and its neighbours do not */
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .claims-row {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+  }
+
+  .claims-row li {
+    padding: 24px 0 4px;
+  }
+
+  /* in a 2x2 the divider belongs only before column two of each row */
+  .claims-row li + li::before {
+    display: none;
+  }
+
+  .claims-row li:nth-child(even)::before {
+    display: block;
+    left: -10px;
+  }
+}
+
+/* =====================================================================
+   Visual rhythm, wordlessly.
+   A ghosted numeral per chapter gives the page a spine without adding a
+   single word. The before/after marker on each comparison card does the
+   same job the captions were doing.
+   ===================================================================== */
+.chapter {
+  position: relative;
+}
+
+.chapter-no {
+  position: relative;
+}
+
+.chapter-no::after {
+  content: attr(data-num);
+  position: absolute;
+  right: 0;
+  top: -0.34em;
+  font-family: var(--font-display);
+  font-size: clamp(84px, 13vw, 190px);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.05;
+  pointer-events: none;
+  user-select: none;
+}
+
+.chapter.paper .chapter-no::after {
+  color: var(--paper-ink);
+  opacity: 0.06;
+}
+
+/* before / after: hollow dot versus filled accent dot */
+.win,
+.phone {
+  position: relative;
+}
+
+.win::before,
+.phone::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+}
+
+.win.bad::before,
+.phone.bad::before {
+  border-color: rgba(255, 138, 107, 0.55);
+}
+
+.win.good::before,
+.phone.good::before {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* the "before" reads as wrong rather than merely dim */
+.win.bad,
+.phone.bad {
+  opacity: 0.68;
+  border-color: rgba(255, 138, 107, 0.26);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter-no::after {
+    opacity: 0.05;
+  }
+}
+
+/* =====================================================================
+   Visual rhythm, wordlessly.
+   A ghosted numeral per chapter gives the page a spine without adding a
+   single word. The before/after marker on each comparison card does the
+   same job the captions were doing.
+   ===================================================================== */
+.chapter {
+  position: relative;
+}
+
+.chapter-no {
+  position: relative;
+}
+
+.chapter-no::after {
+  content: attr(data-num);
+  position: absolute;
+  right: 0;
+  top: -0.34em;
+  font-family: var(--font-display);
+  font-size: clamp(84px, 13vw, 190px);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.05;
+  pointer-events: none;
+  user-select: none;
+}
+
+.chapter.paper .chapter-no::after {
+  color: var(--paper-ink);
+  opacity: 0.06;
+}
+
+/* before / after: hollow dot versus filled accent dot */
+.win,
+.phone {
+  position: relative;
+}
+
+.win::before,
+.phone::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+}
+
+.win.bad::before,
+.phone.bad::before {
+  border-color: rgba(255, 138, 107, 0.55);
+}
+
+.win.good::before,
+.phone.good::before {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* the "before" reads as wrong rather than merely dim */
+.win.bad,
+.phone.bad {
+  opacity: 0.68;
+  border-color: rgba(255, 138, 107, 0.26);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter-no::after {
+    opacity: 0.05;
+  }
+}
