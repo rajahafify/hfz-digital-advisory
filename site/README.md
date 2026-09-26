@@ -445,6 +445,14 @@ categories — the hue is there to separate them at a glance and to get colour
 into the one long chapter that was still pure monochrome. If you reorder the
 cards, reassign the hues.
 
+**`.flaw-pair` uses `repeat(2, minmax(0, 1fr))`, never `1fr 1fr`.** A bare `1fr`
+is `minmax(auto, 1fr)`: it refuses to shrink below its content's min-content
+width. With `1fr 1fr` the before/after pair held a hard 336px floor, which pushed
+the entire document 31px sideways at 320px and 11px at 340px. `.flaws` and
+`.wizard` already used `minmax(0, 1fr)`; this one was missed. Any grid that must
+fit a narrow column wants `minmax(0, 1fr)` — the `auto` minimum is a trap that
+only shows up at widths you are not testing.
+
 ### What is deliberately still monochrome
 
 Body copy, headings, prices and the ledger rules. The prices are the product and
@@ -576,6 +584,57 @@ This is the table that used to read `Yes / No / Yes` straight down the page.
 
 The dots and the meter are **built by script** from `data-qty` / `data-lvl`. The
 wording is already in the markup, so nothing is lost if the script does not run.
+
+#### On mobile it stops being a table
+
+At `max-width: 720px` the four columns stack into **one block per feature**: the
+feature name is the heading, and each tier is a labelled line beneath it.
+
+The measurements behind that breakpoint, taken from a real 390px viewport:
+
+| | |
+|---|---|
+| Content column at 390px | **331px** |
+| The table's min-content width | **521px** |
+| Hidden behind horizontal scroll | **190px** — a whole tier column |
+| Tiers actually visible | **2 of 3** |
+
+It did not break the page layout — `document.scrollWidth` stayed at the viewport
+— but it failed as a comparison. You saw two tiers, the header row scrolled out
+of reach so nothing named the columns, and the 92px label column wrapped
+"Responsive build" onto two lines.
+
+The table's min-content is **521px** and the content column is `viewport − 59`,
+so it technically fits from ~580px up. The breakpoint is **720px** deliberately,
+not because it has to be: at 720 the table has 140px of slack over its minimum,
+which is comfortable rather than crammed. 720 is also the breakpoint the rest of
+the file already uses for mobile.
+
+**How it works.** `data-tier` sits on each of the 30 cells, beside the existing
+`data-qty` / `data-lvl` / `data-max`. The label is `content: attr(data-tier)` on
+`::before`, and because it takes `flex: 1 1 auto` it eats the slack and pushes
+the value cluster right. The `thead` is hidden — once the columns are stacked it
+names nothing.
+
+Two things to know if you touch this:
+
+- The label needs `.chapter.paper .matrix td::before { color: #5a6472 }`.
+  `--ink-soft` is `rgba(242,243,245,0.6)`, near-white, and this chapter is paper.
+  Without the override the labels render but are **invisible**.
+- Values keep their meaning because every cell already carries its own `.vh`
+  wording, so a stacked row still reads as "Starter, up to 5 pages". Generated
+  content is exposed to assistive tech, but the `.vh` text is what makes the
+  sentence complete.
+
+Verify with the numbers, not by eye:
+
+```js
+getComputedStyle(td).display            // "flex" stacked, "table-cell" not
+getComputedStyle(td, "::before").content // "\"Starter\"" stacked, "none" not
+ts.scrollWidth > ts.clientWidth          // must be false at every width
+```
+
+Measured clean at 320, 390, 430, 720, 800 and 1440.
 
 ### The rest
 
@@ -985,11 +1044,6 @@ Add a `public/CNAME` file containing the domain, remove `BASE_PATH` from the
 workflow build step, and point the domain at GitHub Pages per GitHub's docs.
 Note the Pages site currently has `https_enforced: true` — a custom domain will
 need a valid cert before it serves.
-
-### Custom domain
-
-Add a `public/CNAME` file containing the domain, remove `BASE_PATH` from the
-workflow build step, and point the domain at GitHub Pages per GitHub's docs.
 
 ## Deploy to cPanel instead
 

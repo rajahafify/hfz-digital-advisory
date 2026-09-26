@@ -2308,6 +2308,88 @@ a {
   background: rgba(14, 17, 22, 0.025);
 }
 
+/* Below the width the table needs, four columns stop being readable. Measured
+   at a 390px phone: the content column is 331px and the table wants 521px, so
+   a whole tier column sat behind a horizontal scroll and the header row — the
+   only thing naming the columns — scrolled out of reach. You could see two
+   tiers and not reliably tell which was which.
+
+   So the table becomes one block per feature: the feature is the heading and
+   each tier is a labelled line beneath it. The comparison survives, and now
+   all three tiers are visible at once with nothing to scroll sideways.
+
+   The tier name comes from data-tier, which sits on each cell next to the
+   existing data-qty / data-lvl / data-max. Generated content is exposed to
+   assistive tech, and every value cell already carries its own .vh wording,
+   so a stacked row still reads as "Starter, up to 5 pages". */
+@media (max-width: 720px) {
+  .matrix,
+  .matrix tbody,
+  .matrix tr,
+  .matrix th,
+  .matrix td {
+    display: block;
+  }
+
+  /* the column headers have no meaning once the columns are stacked */
+  .matrix thead {
+    display: none;
+  }
+
+  .matrix tr {
+    padding: 15px 0 13px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* a heavier rule opens the stack, the way a table head does */
+  .matrix tbody tr:first-child {
+    border-top: 1px solid var(--ink);
+  }
+
+  .matrix th,
+  .matrix td {
+    padding: 0;
+    border: 0;
+    text-align: left;
+  }
+
+  .matrix tbody th[scope="row"] {
+    font-weight: 500;
+    margin-bottom: 7px;
+  }
+
+  .matrix td {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 3px 0;
+  }
+
+  /* the label takes the slack, which pushes the value cluster to the right */
+  .matrix td::before {
+    content: attr(data-tier);
+    flex: 1 1 auto;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* --ink-soft is near-white and this chapter is paper, so the label needs the
+     same paper-safe muted ink the thead uses. Without this the labels render,
+     but invisibly. */
+  .chapter.paper .matrix td::before {
+    color: #5a6472;
+  }
+
+  /* the dots and the meter already carry their own spacing for inline flow */
+  .matrix td .dots,
+  .matrix td .lvl-meter {
+    margin-right: 0;
+  }
+}
+
 /* =====================================================================
    Section 02 shows the four failures instead of describing them: each card
    is a before/after pair of miniature pages. Words were doing work here that
@@ -2407,7 +2489,10 @@ a {
 
 .flaw-pair {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* minmax(0, 1fr), not 1fr: a bare 1fr is minmax(auto, 1fr) and refuses to
+     shrink below its content, which held this pair at a 336px floor and pushed
+     the whole document sideways below 340px. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   align-items: start;
 }
@@ -2626,7 +2711,7 @@ a {
 
 @media (max-width: 900px) {
   .flaws {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
