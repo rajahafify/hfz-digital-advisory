@@ -1522,17 +1522,10 @@ a {
 }
 
 
-/* the rail links to the real page of whichever site is on stage */
-.nowshowing a {
+/* the rail names whichever site is on stage. It is deliberately not a link, so
+   no underline and no hover state: nothing there invites a click off the page. */
+.nowshowing .rail-now {
   color: var(--ink);
-  text-decoration: none;
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 2px;
-}
-
-.nowshowing a:hover {
-  border-bottom-color: var(--accent);
-  color: var(--accent);
 }
 
 

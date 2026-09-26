@@ -826,11 +826,16 @@ The h1 carries a `<br>` after "it," so it breaks as "If you can imagine it," /
 break is suppressed (`display: none` on the `br`), because the first half no
 longer fits on one line and the forced break left "it," alone.
 
-- Open one directly: `/samples/utama.html`, `/samples/lumen.html`, and so on.
-- `sample.css` and `sample.js` are shared by all six. `sample.js` reveals
+- Open one directly: `/samples/fern.html`, `/samples/morsel.html`,
+  `/samples/rakan.html`, `/samples/umrah.html`.
+- `sample.css` and `sample.js` are shared by all four. `sample.js` reveals
   sections on scroll and publishes `--mp`, which the parallax layers consume.
 - Frames load lazily: only the panel on stage and the next one get a `src`.
-- The hero rail links to the site currently on stage.
+- The hero rail **names** the site currently on stage but deliberately does not
+  link to it. That was a client call: the panels illustrate what we build, they
+  are not a portfolio to send visitors away for. `setLive()` in `scene.js` still
+  resolves the name from `.poster b`, so if the link is ever restored the only
+  missing piece is the `href` assignment that used to sit beside it.
 
 Each one has its **own structure**, not the same skeleton recoloured:
 

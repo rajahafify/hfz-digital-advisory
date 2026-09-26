@@ -264,8 +264,8 @@
   let camX = 0;
   let scrollP = 0;
 
-  // the rail names the site on stage and links to it, because the whole point
-  // of these being real pages is that a visitor can open one properly
+  // The rail names whichever site is on stage. It is not a link: the panels are
+  // an illustration of what we build, not a portfolio to send people away for.
   const nowShowing = document.getElementById("nowshowing");
 
   const setLive = (el) => {
@@ -274,10 +274,8 @@
     liveEl = el;
     if (el) el.classList.add("is-live");
     if (el && nowShowing) {
-      const slug = el.dataset.site;
       const name = el.querySelector(".poster b");
-      nowShowing.href = `./samples/${slug}.html`;
-      nowShowing.textContent = name ? name.textContent : slug;
+      nowShowing.textContent = name ? name.textContent : el.dataset.site;
     }
   };
 
